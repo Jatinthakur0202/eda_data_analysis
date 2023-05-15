@@ -1,0 +1,721 @@
+---
+title: "LA-EDA"
+author: "Jatin-Dheeraj"
+date: "2023-05-14"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+## we using readr package to read a CSV file called "housing.csv" from your local file system and then viewing the data using the View() function.
+
+```{r echo=TRUE, warning=FALSE}
+library(readr)
+housing <- read_csv("C:/Users/HP/Downloads/archive (2)/housing.csv")
+View(housing)
+```
+
+------------------------------------------------------------------------
+
+## The str() function in R provides a concise summary of the structure of a given object.
+
+```{r echo=TRUE}
+str(housing)
+
+
+```
+
+## table(housing\$households) in R creates a frequency table that shows the number of occurrences of each unique value in the households column of the housing data frame.
+
+```{r echo=TRUE}
+options(max.print = 30)
+table(housing $ households)
+```
+
+## By changing the options("max.print") value, you can set the default number of rows to display.
+
+```{r echo=TRUE}
+options(max.print = 30)
+
+
+```
+
+## class(housing)" will return the class of the object "housing".
+
+```{r echo=TRUE}
+class(housing)
+```
+
+## head(housing)" will display the first few rows of the "housing" dataset or data frame, allowing the user to quickly preview the structure and contents of the data
+
+```{r echo=TRUE}
+head(housing)
+
+```
+
+## summary(): Provides a summary of a data frame
+
+```{r echo=TRUE}
+summary(housing)
+```
+
+## dim(): Shows the dimensions of a data frame
+
+```{r echo=TRUE}
+  dim(housing)
+```
+
+## nrow(): Shows the number of rows in a data frame
+
+```{r echo=TRUE}
+  nrow(housing)
+```
+
+## ncol(): Shows the number of columns in a data frame
+
+```{r echo=TRUE}
+  ncol(housing)
+
+```
+
+## names(): Shows the column names of a data frame
+
+```{r echo=TRUE}
+names(housing)
+```
+
+## tail(): Shows the last few rows of a data frame
+
+```{r echo=TRUE}
+  tail(housing)
+```
+
+## subset(): Extracts a subset of a data frame based on a condition
+
+```{r echo=TRUE}
+  subset(housing)
+```
+
+## select(): Selects specific columns from a data frame
+
+> ## Select columns
+
+```{r echo=TRUE}
+
+library('dplyr')
+housing %>% select(2,3)
+```
+
+## Select columns by list of index or position
+
+```{r echo=TRUE}
+housing %>% select(c(2,3))
+```
+
+## Select columns by index range
+
+```{r echo=TRUE}
+housing %>% select(2:3)
+```
+
+## Select columns by label'total_rooms','housing_median_age'
+
+```{r echo=TRUE}
+ housing %>% select('total_rooms','housing_median_age')
+```
+
+## Select columns except 'total_rooms','housing_median_age'
+
+```{r echo=TRUE}
+housing %>% select(-c('total_rooms','housing_median_age'))
+
+```
+
+## Select columns between 'total_rooms','housing_median_age'
+
+```{r echo=TRUE}
+housing %>% select('total_rooms':'housing_median_age')
+```
+
+## Select columns starts with a string
+
+```{r echo=TRUE}
+housing %>% select(starts_with('l'))
+```
+
+## Select columns that ends with a string
+
+```{r echo=TRUE}
+housing %>% select(ends_with('e'))
+```
+
+## Select columns that contains
+
+```{r echo=TRUE}
+housing  %>% select(contains('p'))
+```
+
+## Select all numeric columns
+
+```{r echo=TRUE}
+housing %>% select_if(is.numeric)
+```
+
+## subset(): Extracts a subset of a data frame based on a condition
+
+# Syntax of subset()
+
+subset(x, subset, select, drop = FALSE, ...)
+
+## subset by row name
+
+```{r echo=TRUE}
+subset(housing, subset=rownames(housing) == '41') 
+```
+
+## subset row by of row values
+
+```{r echo=TRUE}
+subset(housing, rownames(housing) %in% c('41','52','42'))
+```
+
+## subset() by Condition or Column Value
+
+```{r echo=TRUE}
+  subset(housing, latitude=='37.83')
+```
+
+## subset by multiple conditions
+
+```{r echo=TRUE}
+  subset(housing, population =='754' | total_bedrooms == '311')
+```
+
+## subset columns
+
+```{r echo=TRUE}
+  subset(housing,housing_median_age=='51',select=c('longitude','latitude'))
+```
+
+## subset columns by index
+
+```{r echo=TRUE}
+  subset(housing,housing_median_age=='51',select=c(1,2,3))
+```
+
+## filter(): Filters a data frame based on a condition
+
+# filter() by row name
+
+```{r echo=TRUE}
+
+library('dplyr')
+filter(housing, rownames(housing) == '51')
+
+```
+
+## filter() by column Value
+
+```{r echo=TRUE}
+  filter(housing, total_rooms == '896')
+```
+
+## filter() by list of values
+
+```{r echo=TRUE}
+  filter(housing, housing_median_age %in% c("21", "39", "33"))
+```
+
+## filter() by row number
+
+```{r echo=TRUE}
+  slice(housing, 5)
+```
+
+## arrange(): Sorts a data frame by one or more columns
+
+# Syntax of arrange()
+
+arrange(.data, ..., .by_group = FALSE)
+
+## Using arrange in descending order
+
+```{r echo=TRUE}
+  temp <- housing %>% arrange(desc(latitude))
+   temp
+```
+
+## Using arrange in descending order
+
+```{r echo=TRUE}
+  temp <- housing %>% arrange((housing_median_age))
+  temp
+```
+
+## Using arrange by multiple columns
+
+```{r echo=TRUE}
+  temp <- housing %>% arrange(housing_median_age,desc(total_rooms))
+   temp
+```
+
+## group_by(): Groups a data frame by one or more columns
+
+# Syntax group by
+
+group_by(.data, ..., add = FALSE)
+
+## Load dplyr
+
+```{r echo=TRUE}
+  library(dplyr)
+```
+
+## group_by() on department
+
+```{r echo=TRUE}
+grp_tbl <- housing %>% group_by(housing_median_age)
+grp_tbl
+  
+```
+
+## summarise on groupped data.
+
+```{r echo=TRUE}
+  agg_tbl <- grp_tbl %>% summarise(sum(housing_median_age))
+  agg_tbl
+```
+
+## Convert tibble to DataFrame
+
+```{r echo=TRUE}
+  df2 <- agg_tbl %>% as.data.frame()
+  class(df2)
+```
+
+## Assign column Name to the aggregated column
+
+## Group by on multiple column
+
+```{r echo=TRUE}
+  agg_tbl <- housing %>% group_by(housing_median_age) %>% 
+               summarise(total_salary=sum(total_rooms))
+agg_tbl
+```
+
+## cbind(): Concatenates two data frames by adding columns
+
+## 
+
+```{r echo=TRUE}
+y1 <- c(9, 8, 7, 6, 5)    
+  data_new1 <- cbind(housing, y1)     # cbind vector to dataframe
+data_new1                             # Print data to RStudio console
+```
+
+## is.na(): Checks for missing values in a data frame
+
+```{r echo=TRUE}
+  is.na(housing)
+```
+
+## complete.cases(): Removes rows with missing values
+
+```{r echo=TRUE}
+  complete.cases(housing)
+  
+```
+
+## mean(): Calculates the mean of a numeric vector
+
+```{r echo=TRUE}
+  mean(housing$median_income)
+```
+
+## median(): Calculates the median of a numeric vector
+
+```{r echo=TRUE}
+  median(housing$latitude)
+```
+
+## sd(): Calculates the standard deviation of a numeric vector
+
+```{r echo=TRUE}
+  sd(housing$housing_median_age)
+```
+
+## var(): Calculates the variance of a numeric vector
+
+```{r echo=TRUE}
+  var(housing$longitude)
+```
+
+## max(): Finds the maximum value in a numeric vector
+
+```{r echo=TRUE}
+  max(housing$total_rooms)
+```
+
+## min(): Finds the minimum value in a numeric vector
+
+```{r echo=TRUE}
+  min(housing$population)
+```
+
+## quantile(): Calculates the quantiles of a numeric vector
+
+```{r echo=TRUE}
+  quantile(housing$longitude)
+```
+
+## unique(): Finds the unique values of a vector or column in a data frame
+
+```{r echo=TRUE}
+  unique(housing$total_rooms)
+```
+
+## duplicated(): Identifies duplicated values in a vector or column in a data frame
+
+```{r echo=TRUE}
+  duplicated(housing$households)
+```
+
+## as.numeric(): Converts a factor or character vector or column in a data frame to a numeric vector
+
+```{r echo=TRUE}
+    # creating a character vector
+x = c('1', '2', '3', '4', '5')
+
+# implementing the as.numeric() function 
+y = as.numeric(x) 
+
+# printing the numeric vector
+y
+
+# checking if its a numeric matrix
+is.numeric(y)
+```
+
+## To divide a vector into groups, use the split() function.
+
+```{r echo=TRUE}
+    split(housing, f = housing$ocean_proximity)
+```
+
+## Split data frame by ocean_proximity
+
+```{r echo=TRUE}
+    s <- split(housing, housing$ocean_proximity)
+    s
+```
+
+## Add Column Using cbin() Function
+
+```{r echo=TRUE}
+percentage = c(76,86)
+df2 <- cbind(housing, percentage)
+df2
+
+```
+
+## Add Column in R using [] Notation
+
+```{r echo=TRUE}
+chapters = c(1,2,3,4,5,6,7,8,9,10)
+df2['new'] <- chapters
+df2
+
+```
+
+## \# Using \$ notation
+
+```{r echo=TRUE}
+  chapters = c("A","B","C")
+df2$chapters <- chapters
+df2
+
+```
+
+## length() function: returns the number of elements in a vector
+
+```{r echo=TRUE}
+length(housing)
+
+```
+
+## Filtering data based on conditions:
+
+```{r echo=TRUE}
+filtered_data <- subset(housing, housing_median_age > 20 & median_income >50000)
+filtered_data
+```
+
+## Grouping data and calculating aggregate functions:
+
+```{r echo=TRUE}
+library(dplyr)
+grouped_data <- housing %>% group_by(ocean_proximity) %>% summarise(avg_median_income = mean(median_income), max_median_house_value = max(median_house_value))
+grouped_data
+```
+
+## Adding a new column to the dataset:
+
+```{r echo=TRUE}
+housing$new_column <- housing$total_rooms + housing $total_bedrooms
+head(housing)
+
+```
+
+## Saving the modified dataset to a new CSV file:
+
+```{r echo=TRUE}
+write.csv(housing, file = "modified_dataset.csv", row.names = FALSE)
+
+```
+
+## Calculate the correlation between variables:
+
+```{r echo=TRUE}
+correlation_matrix <- cor(housing[, c("housing_median_age", "total_rooms", "total_bedrooms", "population", "households", "median_income", "median_house_value")])
+correlation_matrix 
+
+```
+
+## Counting the number of unique values in a column:
+
+```{r echo=TRUE}
+unique_count <- length(unique(housing$ocean_proximity))
+unique_count
+
+```
+
+## Rename a column:
+
+```{r echo=TRUE}
+names(housing)[names(housing) == "ocean_proximity"] <- "proximity_to_ocean"
+head(housing)
+```
+
+## Create a new variable based on conditions:
+
+```{r echo=TRUE}
+housing$high_income <- ifelse(housing$median_income > 100000, "High", "Low")
+head(housing)
+```
+
+## Compute a cross-tabulation of two variables:
+
+```{r echo=TRUE}
+cross_tab <- table(housing$latitude, housing$longitude)
+head(cross_tab)
+```
+
+## Calculate the cumulative sum of a variable:
+
+```{r echo=TRUE}
+housing$cumulative_rooms <- cumsum(housing$total_rooms)
+head(housing)
+
+```
+
+## Calculate the quantiles of a variable:
+
+```{r echo=TRUE}
+quantiles <- quantile(housing$median_house_value, probs = c(0.25, 0.5, 0.75))
+quantiles
+
+```
+
+## Subset data based on multiple conditions:
+
+```{r echo=TRUE}
+subset_data <- housing[housing$housing_median_age > 30 & housing$population < 1000, ]
+head(subset_data)
+```
+
+## If you want to randomly sample a specific number of rows from the dataset, you can use the sample_n() function from the dplyr package.
+
+```{r echo=TRUE}
+library(dplyr)
+sample_n(housing, size = 10)
+
+
+```
+
+## Calculate the mode using the mode function from the pracma
+
+```{r echo=TRUE}
+library('pracma')
+
+mode_value <- mode(housing$median_income)
+mode_value
+```
+
+## Calculate the mode using the table function:
+
+```{r echo=TRUE}
+mode_value <- names(table(housing$median_income))[which.max(table(housing$median_income))]
+mode_value
+```
+
+## Perform hierarchical clustering on numerical variables:
+
+```{r echo=TRUE}
+num_data <- housing[, c("housing_median_age", "total_rooms", "total_bedrooms", "population", "households", "median_income", "median_house_value")]
+hclust_result <- hclust(dist(num_data))
+
+hclust_result
+
+```
+
+## Calculate the Euclidean distance between two variables:
+
+```{r echo=TRUE}
+euclidean_distance <- dist(head(housing[, c("total_rooms", "total_bedrooms")]), method = "euclidean")
+euclidean_distance 
+
+```
+
+## Calculate the percentage of missing values in each column:
+
+```{r echo=TRUE}
+missing_percentage <- colMeans(is.na(housing)) * 100
+missing_percentage 
+```
+
+## Calculate the covariance between two variables:
+
+```{r echo=TRUE}
+
+covariance <- cov(housing$total_rooms, housing$median_house_value)
+covariance
+```
+
+## Convert a variable to a different data type:
+
+```{r echo=TRUE}
+temp <- housing
+temp$housing_median_age <- as.factor(temp$housing_median_age)
+class(temp$housing_median_age)
+```
+
+## Adding a new column to the dataset:
+
+```{r echo=TRUE}
+temp$new_column <- temp$total_rooms + temp$total_bedrooms
+head(temp)
+
+```
+
+## 
+
+```{r echo=TRUE}
+
+median_by_group <- housing %>%
+  group_by(proximity_to_ocean) %>%
+  summarise(median_median_income = median(median_income))
+median_by_group
+
+```
+
+## Create a scatter plot matrix:
+
+```{r echo=TRUE}
+library(ggplot2)
+
+scatter_plot_matrix <- ggplot(housing, aes(x = longitude, y = latitude)) +
+  geom_point() +
+  facet_grid(. ~ proximity_to_ocean) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("Scatter Plot Matrix")
+
+print(scatter_plot_matrix)
+
+```
+
+## Create a bar plot with error bars:
+
+```{r echo=TRUE}
+
+
+line_plot <- ggplot(housing, aes(x = housing_median_age, y = median_house_value, color = proximity_to_ocean)) +
+  geom_line() +
+  xlab("Housing Median Age") +
+  ylab("Median House Value") +
+  ggtitle("Line Plot")
+
+print(line_plot)
+
+
+```
+
+## Create a scatter plot with a trend line:
+
+```{r echo=TRUE}
+library(ggplot2)
+temp <- head(housing)
+scatter_plot <- ggplot(temp, aes(x = total_rooms, y = median_house_value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  xlab("Total Rooms") +
+  ylab("Median House Value") +
+  ggtitle("Scatter Plot with Trend Line")
+
+print(scatter_plot)
+
+```
+
+## Create a bar plot with stacked bars:
+
+```{r echo=TRUE}
+
+
+
+
+stacked_bar_plot <- ggplot(temp, aes(x = proximity_to_ocean, fill = housing_median_age)) +
+  geom_bar(position = "stack") +
+  xlab("Proximity to Ocean") +
+  ylab("Count") +
+  ggtitle("Stacked Bar Plot")
+
+print(stacked_bar_plot)
+
+
+
+```
+
+## Create a pie chart:
+
+```{r echo=TRUE}
+
+
+pie_chart <- ggplot(temp, aes(x = "", fill = proximity_to_ocean)) +
+  geom_bar(width = 1) +
+  coord_polar("y", start = 0) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Pie Chart")
+
+print(pie_chart)
+
+
+```
+
+## Create a scatter plot with jittered data points:
+
+```{r echo=TRUE}
+
+
+scatter_plot <- ggplot(temp, aes(x = total_rooms, y = median_house_value)) +
+  geom_jitter() +
+  xlab("Total Rooms") +
+  ylab("Median House Value") +
+  ggtitle("Scatter Plot with Jittered Data Points")
+
+print(scatter_plot)
+
+
+```
